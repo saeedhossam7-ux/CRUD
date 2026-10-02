@@ -12,7 +12,7 @@ var productList = JSON.parse(localStorage.getItem('productList')) || []
 var proIndex;
 
 var nameRegex = /^[A-Z][A-Za-z0-9 ]{3,10}$/;
-var categoryRegex = /^(Mobile|Laptop|Camera|Clothes|Medicine)$/;
+var categoryRegex = /^(Mobile|Laptop|Camera|Clothes|Medicine|Food)$/;
 var priceRegex = /^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|10000)$/;
 var descriptionRegex = /^[A-Za-z0-9 ]{10,}$/;
 
@@ -153,59 +153,6 @@ function search() {
     }
   }
 };
-function addProduct() {
-  var isValid =
-    validation(nameRegex, productNameInput) &&
-    validation(categoryRegex, productCategoryInput) &&
-    validation(priceRegex, productPriceInput) &&
-    validation(descriptionRegex, productDescriptionInput);
-
-  if (isValid) {
-    var file = productImageInput.files[0];
-
-    if (!file) {
-      Swal.fire({
-        icon: "error",
-        title: "اختار صورة الأول"
-      });
-      return;
-    }
-
-    var reader = new FileReader();
-
-    reader.onload = function () {
-      var product = {
-        name: productNameInput.value,
-        category: productCategoryInput.value,
-        price: productPriceInput.value,
-        description: productDescriptionInput.value,
-        image: reader.result
-      };
-
-      productList.push(product);
-
-      localStorage.setItem("productList", JSON.stringify(productList));
-
-      displayAllProduct();
-      clearForm();
-
-      Swal.fire({
-        title: "الله ينور يمعلم",
-        icon: "success",
-        draggable: true
-      });
-    };
-
-    reader.readAsDataURL(file);
-
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "راجع بياناتك تاني كويس"
-    });
-  }
-}
 
 function productInfo(index) {
   proIndex = index;
