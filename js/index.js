@@ -19,47 +19,70 @@ var descriptionRegex = /^[A-Za-z0-9 ]{10,}$/;
 displayAllProduct()
 
 function addProduct() {
-  var isValid = validation(nameRegex, productNameInput) &&
+  var isValid =
+    validation(nameRegex, productNameInput) &&
     validation(categoryRegex, productCategoryInput) &&
     validation(priceRegex, productPriceInput) &&
-    validation(descriptionRegex, productDescriptionInput)
-
+    validation(descriptionRegex, productDescriptionInput);
 
   if (isValid) {
-    var prodcuts = {
-      name: productNameInput.value,
-      category: productCategoryInput.value,
-      price: productPriceInput.value,
-      description: productDescriptionInput.value,
-      image: productImageInput.files[0].name
 
+    var file = productImageInput.files[0];
+
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        title: "اختار صورة الأول"
+      });
+      return;
     }
 
-    productList.push(prodcuts);
-    localStorage.setItem('productList', JSON.stringify(productList));
-    displayAllProduct()
-    clearForm()
+    var reader = new FileReader();
 
-    Swal.fire({
-      title: "الله ينور يمعلم",
-      icon: "success",
-      draggable: true
-    });
+    reader.onload = function () {
 
+      var product = {
+        name: productNameInput.value,
+        category: productCategoryInput.value,
+        price: productPriceInput.value,
+        description: productDescriptionInput.value,
+        image: reader.result
+      };
+
+      productList.push(product);
+
+      localStorage.setItem(
+        "productList",
+        JSON.stringify(productList)
+      );
+
+      displayAllProduct();
+      clearForm();
+
+      Swal.fire({
+        title: "الله ينور يمعلم",
+        icon: "success",
+        draggable: true
+      });
+    };
+
+    reader.readAsDataURL(file);
 
   } else {
+
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: "راجع بيناتك تاني كويس",
+      text: "راجع بياناتك تاني كويس"
     });
+
   }
 }
 function displayProduct(index) {
   var prodcutCart = `
  <div class="col-md-6 col-lg-3">
               <div class="product-card rounded-3 overflow-hidden">
-                <img src="./images/${productList[index].image}" class="w-100  object-fit-contain bg-white p-3" alt="" />
+                <img src="${productList[index].image}" class="w-100  object-fit-contain bg-white p-3" alt="" />
                 <div class="product-info p-3">
                   <div
                     class="d-flex align-items-center justify-content-between"
@@ -133,43 +156,119 @@ function search() {
 
 function productInfo(index) {
   proIndex = index;
-  productNameInput.value = productList[index].name
-  productCategoryInput.value = productList[index].category
-  productPriceInput.value = productList[index].price
-  productDescriptionInput.value = productList[index].description
-  productImageInput.files[0] ? productImageInput.files[0].name : productList[index].image
+  productNameInput.value = productList[index].name;
+  productCategoryInput.value = productList[index].category;
+  productPriceInput.value = productList[index].price;
+  productDescriptionInput.value = productList[index].description;
 
-  addbtn.classList.add('d-none')
-  updatebtn.classList.remove('d-none')
+  validation(nameRegex, productNameInput);
+  validation(categoryRegex, productCategoryInput);
+  validation(priceRegex, productPriceInput);
+  validation(descriptionRegex, productDescriptionInput);
 
+  addbtn.classList.add('d-none');
+  updatebtn.classList.remove('d-none');
 }
 
 function updateProduct() {
   var isValid = validation(nameRegex, productNameInput) &&
     validation(categoryRegex, productCategoryInput) &&
     validation(priceRegex, productPriceInput) &&
-    validation(descriptionRegex, productDescriptionInput)
-
+    validation(descriptionRegex, productDescriptionInput);
 
   if (isValid) {
-productList[proIndex].name = productNameInput.value
-productList[proIndex].category = productCategoryInput.value
-productList[proIndex].price = productPriceInput.value
-productList[proIndex].description = productDescriptionInput.value
-productList[proIndex].image = productImageInput.files[0]?.name || productList[proIndex].image;
-updatebtn.classList.add('d-none')
-  addbtn.classList.remove('d-none')
-    
-    localStorage.setItem('productList', JSON.stringify(productList));
-    displayAllProduct()
-    clearForm()
+    var file = productImageInput.files[0];
 
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        saveUpdatedProduct(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveUpdatedProduct(productList[proIndex].image);
+    }
 
   } else {
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      text: "راجع بيناتك تاني كويس",
+      text: "راجع بياناتك تاني كويس",
+    });
+  }
+}
+
+function saveUpdatedProduct(imageSource) {
+  productList[proIndex].name = productNameInput.value;
+  productList[proIndex].category = productCategoryInput.value;
+  productList[proIndex].price = productPriceInput.value;
+  productList[proIndex].description = productDescriptionInput.value;
+  productList[proIndex].image = imageSource;
+
+  updatebtn.classList.add('d-none');
+  addbtn.classList.remove('d-none');
+
+  localStorage.setItem('productList', JSON.stringify(productList));
+  displayAllProduct();
+  clearForm();
+
+  Swal.fire({
+    title: "تم التعديل بنجاح",
+    icon: "success",
+    draggable: true
+  });
+}
+
+function addProduct() {
+  var isValid =
+    validation(nameRegex, productNameInput) &&
+    validation(categoryRegex, productCategoryInput) &&
+    validation(priceRegex, productPriceInput) &&
+    validation(descriptionRegex, productDescriptionInput);
+
+  if (isValid) {
+    var file = productImageInput.files[0];
+
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        title: "اختار صورة الأول"
+      });
+      return;
+    }
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      var product = {
+        name: productNameInput.value,
+        category: productCategoryInput.value,
+        price: productPriceInput.value,
+        description: productDescriptionInput.value,
+        image: reader.result
+      };
+
+      productList.push(product);
+
+      localStorage.setItem("productList", JSON.stringify(productList));
+
+      displayAllProduct();
+      clearForm();
+
+      Swal.fire({
+        title: "الله ينور يمعلم",
+        icon: "success",
+        draggable: true
+      });
+    };
+
+    reader.readAsDataURL(file);
+
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "راجع بياناتك تاني كويس"
     });
   }
 }
