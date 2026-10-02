@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Management System</title><!--  -->
+  <!-- * ### Font Awesome -->
+  <link rel="stylesheet" href="./css/all.min.css" />
+  <!-- * ### Bootstrap -->
+  <link rel="stylesheet" href="./css/bootstrap.min.css" />
+  <!-- * ### Main Style Sheet -->
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <main>
+    <section>
+      <div class="container">
+        <h1 class="h3 text-center my-4">Product Management System</h1>
+        <form>
+          <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="productName" placeholder="Product Name" autocomplete="off"
+              oninput="validation(nameRegex,productNameInput)" />
+            <p class="error d-none ">* Name must be at least 3 characters long and first character must be a capital
+              letter.</p>
+            <label for="productName">Product Name</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" class="form-control mb-2" id="productCategory" placeholder="Product Category"
+              autocomplete="off" list="categories" oninput="validation(categoryRegex, productCategoryInput)" />
+            <p class="error d-none">* Please select a valid category.</p>
+            <datalist id="categories">
+              <option>Mobile</option>
+              <option>Laptop</option>
+              <option>Camera</option>
+              <option>Clothes</option>
+              <option>Medicine</option>
+            </datalist>
+            <label for="productCategory">Product Category</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="number" class="form-control mb-2" id="productPrice" placeholder="Product Price"
+              autocomplete="off" oninput="validation(priceRegex, productPriceInput)" />
+            <p class="error d-none">* Please enter price between 0 and 10000.</p>
+            <label for="productPrice">Product Price</label>
+          </div>
+
+          <div class="form-floating">
+            <textarea class="form-control mb-2" id="productDescription" placeholder="Product Description"
+              oninput="validation(descriptionRegex, productDescriptionInput)"></textarea>
+            <p class="error d-none">* Description must be at least 10 characters long.</p>
+            <label for="productDescription">Product Description</label>
+          </div>
+
+          <div class="mb-3">
+            <input type="file" class="form-control" id="productImage" />
+          </div>
+
+          <button type="button" id="addbtn" class="btn btn-primary" onclick="addProduct()">
+            Add Product
+          </button>
+          <button type="button" id="updatebtn" class="btn btn-info d-none" onclick="updateProduct()">
+            update Product
+          </button>
+
+          <input type="search" id="searchProductsInput" placeholder="search products ...."
+            class="w-75 mx-auto form-control my-5" oninput="search()" />
+        </form>
+      </div>
+    </section>
+
+    <section class="pb-5">
+      <div class="container py-5">
+        <div class="row g-3" id="productsContainer"></div>
+
+
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- ^ ### Sweat Alert JS File -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- ^ ### Bootstrap JS File -->
+  <script src="./js/bootstrap.bundle.min.js"></script>
+  <script src="./js/index.js"></script>
+</body>
+</html>
